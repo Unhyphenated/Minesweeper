@@ -22,5 +22,4 @@ class Square
         @revealed ? value.to_s : "_"
     end
 
-
 end
