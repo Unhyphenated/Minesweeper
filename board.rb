@@ -40,8 +40,7 @@ class Board
         adjacents = adjacent_positions(pos)
         bombs = 0
 
-        p self[adjacents[0]].value
-        # adjacents.each { |adjacent| bombs += 1 if [adjacent].value == "*" }
+        adjacents.each { |adjacent| bombs += 1 if self[adjacent].value == "*" }
            
         bombs
     end
@@ -58,4 +57,3 @@ class Board
 end
 
 b = Board.new
-b.bombs([1, 1])
