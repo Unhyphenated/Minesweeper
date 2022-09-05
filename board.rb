@@ -1,10 +1,10 @@
 require_relative "square.rb"
 
 class Board
-    attr_reader :size
-    def initialize(size=9)
+    attr_reader :size, :grid
+    def initialize(size=3)
         @size = size
-        @grid = Array.new(size) { Array.new(size, "_") }
+        @grid = Array.new(size) { Array.new(size, Square.new("_")) }
         populate
         display
     end
@@ -23,7 +23,7 @@ class Board
         @grid.each { |line| puts line.join(" ") }
     end
 
-    def adjacent_bombs(pos)
+    def adjacent_positions(pos)
         row, col = pos 
         adjacents = []
 
@@ -35,6 +35,27 @@ class Board
 
         adjacents
     end
+
+    def bombs(pos)
+        adjacents = adjacent_positions(pos)
+        bombs = 0
+
+        p self[adjacents[0]].value
+        # adjacents.each { |adjacent| bombs += 1 if [adjacent].value == "*" }
+           
+        bombs
+    end
+
+    def [](pos)
+        row, col = pos
+        grid[row][col]
+    end
+
+    def []=(pos, val)
+        row, col = pos
+        grid[row][col] = val
+    end
 end
 
 b = Board.new
+b.bombs([1, 1])

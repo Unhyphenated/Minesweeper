@@ -1,7 +1,7 @@
 class Square
     attr_reader :value
 
-    def initialize(value, revealed=false)
+    def initialize(value, revealed=true)
         @value = value
         @revealed = revealed
     end
