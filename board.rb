@@ -8,7 +8,7 @@ class Board
     end
 
     def populate
-        num_of_bombs = rand(size * size)
+        num_of_bombs = rand(size * size / 2)
 
         num_of_bombs.times do 
             row = rand(size)
