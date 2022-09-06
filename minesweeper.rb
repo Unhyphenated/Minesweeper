@@ -5,7 +5,7 @@ class Minesweeper
     def initialize(size=9)
         @board = Board.new(size)
         @size = size
-        get_user_input
+        play
     end
 
     def pos_prompt
@@ -41,11 +41,6 @@ class Minesweeper
         flag
     end
 
-    def get_user_input
-        pos = get_user_position
-        flag = get_user_flag
-    end
-
     def valid_position?(pos)
         pos.is_a?(Array) &&
         pos.count == 2 &&
@@ -57,9 +52,30 @@ class Minesweeper
         flag.length == 1
     end
 
-    def play
+    def reveal_square(pos, flag)
+        board.reveal(pos)
+        board.safe_squares.delete(pos)
+
+        if flag == "F"
+            board.flag(pos)
+        end
+
+        board.display
 
     end
+
+    def play
+        until board.won?
+
+            board.display
+
+            pos = get_user_position
+            flag = get_user_flag
+            reveal_square(pos, flag)
+        end
+
+    end
+
 end
 
 m = Minesweeper.new
