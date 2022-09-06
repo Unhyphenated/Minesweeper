@@ -79,6 +79,17 @@ class Board
     def switch_value(new_value, pos)
         self[pos] = Square.new(new_value)
     end
-end
 
-b = Board.new
+    def flagged?(pos)
+        self[pos].flagged
+    end
+
+    def flag(pos, status)
+        if flagged?(pos)
+            p "You cannot flag an already flagged position!"
+        else
+            self[pos].flagged = true
+        end
+    end
+
+end
