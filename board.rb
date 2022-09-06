@@ -2,7 +2,7 @@ require_relative "square.rb"
 
 class Board
     attr_reader :size, :grid
-    def initialize(size=3)
+    def initialize(size=9)
         @size = size
         @grid = Array.new(size) { Array.new(size, Square.new("_")) }
         populate
@@ -21,7 +21,11 @@ class Board
     end
 
     def display
-        @grid.each { |line| puts line.join(" ") }
+        puts "#{([" "] + (0...size).to_a).join(" ")}"
+        @grid.each.with_index do |line, i| 
+            puts "#{i} #{line.join(" ")} "
+           
+        end
     end
 
     def adjacent_positions(pos)
