@@ -1,13 +1,13 @@
 require_relative "square.rb"
 
 class Board
-    attr_reader :size, :grid
+    attr_reader :size, :grid, :safe_squares
     def initialize(size=9)
         @size = size
         @grid = Array.new(size) { Array.new(size, Square.new("_")) }
         populate
         set_values
-        display
+        @safe_squares = safe_squares
     end
 
     def populate
@@ -21,10 +21,10 @@ class Board
     end
 
     def display
+        # system("clear")
         puts "#{([" "] + (0...size).to_a).join(" ")}"
         @grid.each.with_index do |line, i| 
             puts "#{i} #{line.join(" ")} "
-           
         end
     end
 
@@ -84,12 +84,42 @@ class Board
         self[pos].flagged
     end
 
-    def flag(pos, status)
-        if flagged?(pos)
-            p "You cannot flag an already flagged position!"
-        else
+    def flag(pos)
+        unless flagged?(pos)
             self[pos].flagged = true
+        else
+            p "You cannot flag an already flagged position!"
         end
     end
 
+    def safe_squares
+        safe_squares = []
+        (0...size).each do |row|
+            (0...size).each do |col|
+                pos = [row, col]
+                if value(pos) != "*"
+                    safe_squares << pos
+                end
+            end
+        end
+
+        safe_squares
+    end
+
+    def revealed?(pos)
+        self[pos].revealed?
+    end
+
+    def reveal(pos)
+        unless revealed?(pos)
+            self[pos].reveal
+        else
+            p "You cannot reveal an already revealed square!"
+        end
+
+    end
+
+    def won?
+        safe_squares.empty?
+    end
 end
