@@ -1,9 +1,10 @@
 class Square
-    attr_reader :value
+    attr_reader :value, :flagged
 
-    def initialize(value, revealed=true)
+    def initialize(value, revealed=false)
         @value = value
         @revealed = revealed
+        @flagged = false
     end
 
     def hide
@@ -17,11 +18,15 @@ class Square
     def revealed?
         @revealed == true 
     end
+
+    def flag
+        @flagged = true
+    end
     
     def to_s
+        return "F" if flagged
+        return "_" if value == "0"
         @revealed ? value.to_s : "_"
     end
-
-    
 
 end
