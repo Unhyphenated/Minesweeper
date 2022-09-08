@@ -21,11 +21,12 @@ class Board
     end
 
     def display
-        # system("clear")
+        system("clear")
         puts "#{([" "] + (0...size).to_a).join(" ")}"
         @grid.each.with_index do |line, i| 
             puts "#{i} #{line.join(" ")} "
         end
+
     end
 
     def adjacent_positions(pos)
@@ -86,7 +87,7 @@ class Board
 
     def flag(pos)
         unless flagged?(pos)
-            self[pos].flagged = true
+            self[pos].flag
         else
             p "You cannot flag an already flagged position!"
         end
@@ -116,10 +117,26 @@ class Board
         else
             p "You cannot reveal an already revealed square!"
         end
-
     end
+
+    def reveal_empty
+        safe_squares.each do |safe_square|
+            if value(safe_square) == "0"
+                p safe_square
+                adjacents = adjacent_positions(safe_square)
+                
+                adjacents.each { |adjacent| self[adjacent].reveal }
+            end
+        end
+        
+    end
+
 
     def won?
         safe_squares.empty?
+    end
+
+    def loss?(pos)
+        value(pos) == "*"
     end
 end
