@@ -55,8 +55,6 @@ class Minesweeper
     def reveal_square(pos, flag)
         board.reveal_empty
         board.reveal(pos)
-        board.safe_squares.delete(pos)
-
         if flag == "F"
             board.flag(pos)
         end
@@ -67,24 +65,35 @@ class Minesweeper
         loss = false
         until loss
             board.display
-
             pos = get_user_position
             flag = get_user_flag
+
             reveal_square(pos, flag)
-            loss = board.loss?(pos)
+
+            if board.loss?(pos) || board.won?
+                loss = true
+            end
+        
         end
         system("clear")
         board.display
     end
 
     def play
-        unless board.won?
+        if !board.won?
             gameplay_loop
-        else
-            return "You won! Restart the program to play again."
         end
-        p "That was a bomb! Restart the program to play again."
+
+        if board.won?
+            board.reveal_all
+            board.display
+            p "You won! Restart the program to play again."
+        else
+            board.reveal_all
+            board.display
+            p "That was a bomb! Restart the program to play again."
+        end
     end
 end
 
-m = Minesweeper.new
+m = Minesweeper.new(9)

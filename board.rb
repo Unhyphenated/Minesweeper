@@ -2,7 +2,7 @@ require_relative "square.rb"
 
 class Board
     attr_reader :size, :grid, :safe_squares
-    def initialize(size=9)
+    def initialize(size)
         @size = size
         @grid = Array.new(size) { Array.new(size, Square.new("_")) }
         populate
@@ -22,11 +22,12 @@ class Board
 
     def display
         system("clear")
-        puts "#{([" "] + (0...size).to_a).join(" ")}"
-        @grid.each.with_index do |line, i| 
-            puts "#{i} #{line.join(" ")} "
-        end
+        # puts "#{([" "] + (0...size).to_a).join(" ")}"
+        # @grid.each.with_index do |line, i| 
+        #     puts "#{i} #{line.join(" ")} "
+        # end
 
+        @grid.each { |line| puts line.join(" ")}
     end
 
     def adjacent_positions(pos)
@@ -114,6 +115,7 @@ class Board
     def reveal(pos)
         unless revealed?(pos)
             self[pos].reveal
+            @safe_squares.delete(pos)
         else
             p "You cannot reveal an already revealed square!"
         end
@@ -122,21 +124,32 @@ class Board
     def reveal_empty
         safe_squares.each do |safe_square|
             if value(safe_square) == "0"
-                p safe_square
                 adjacents = adjacent_positions(safe_square)
                 
                 adjacents.each { |adjacent| self[adjacent].reveal }
             end
         end
-        
     end
 
-
     def won?
-        safe_squares.empty?
+        @safe_squares.empty?
     end
 
     def loss?(pos)
         value(pos) == "*"
+    end
+
+    def all_positions
+        all_positions = []
+        (0...size).each do |row|
+            (0...size).each do |col|
+                all_positions << [row, col]
+            end
+        end
+        all_positions
+    end
+
+    def reveal_all
+        all_positions.each { |square| reveal(square) }
     end
 end
